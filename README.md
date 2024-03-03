@@ -31,6 +31,8 @@ sudo make install
 gnuradio-companion
 ```
 
+6. Open grc file under gr-dora/examples
+
 <br />
 
 
