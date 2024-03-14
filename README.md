@@ -26,12 +26,12 @@ cmake ..
 sudo make install
 ```
 
-5. Run gnuradio-companion
+5. Run gnuradio-companion. Note that it may automatically open a grc file which may or may not be the one you want.
 ```
 gnuradio-companion
 ```
 
-6. Open grc file under gr-dora/examples
+6. Open grc file under gr-dora/flowgraphs
 
 <br />
 
