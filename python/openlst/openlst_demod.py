@@ -6,10 +6,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-import pmt
 import numpy as np
 from gnuradio import gr
-import random
 
 from .fec import decode_fec_chunk
 from .whitening import pn9, whiten
@@ -19,11 +17,7 @@ class openlst_demod(gr.sync_block):
 	"""
 	OpenLST Decoder/Deframer
 
-	This block decodes a raw RF packet (typically from a ZMQ socket)
-	in the form:
-	
-	
-	To an RF message:
+	This block decodes a raw RF packet:
 
 		| Preamble | Sync Word(s) | Data Section |
 	
@@ -31,7 +25,7 @@ class openlst_demod(gr.sync_block):
 
 		| Length (1 byte) | Flags (1 byte) | Seqnum (2 bytes) | Data (N bytes) | HWID (2 bytes) | CRC (2 bytes)
 
-	Into a message (typically for a ZMQ socket) in the form:
+	Into a message in the form:
 		
 		| HWID (2 bytes) | Seqnum (2 bytes) | Data (N bytes) |
 	
@@ -59,9 +53,6 @@ class openlst_demod(gr.sync_block):
 			in_sig=[np.uint8],
 			out_sig=[np.uint8],
 		)
-		# Messages are sent in raw form without a length or CRC
-		# generally this goes to a ZMQ socket
-		self.message_port_register_out(pmt.intern('message'))
 
 		self.preamble = [int(i) for i in "10101010" * preamble_bytes]
 		self.preamble_quality = preamble_quality
@@ -72,11 +63,11 @@ class openlst_demod(gr.sync_block):
 		self.whitening = whitening
 
 		self._buff = []
+		self._out_buffer = []
+
 		self._mode = 'preamble'
 		self._length = 0
 		self._sync_bits = len(self.sync_word) * 8
-
-		self._out_buffer = []
 
 	def work(self, input_items, output_items):
 		self._buff.extend(input_items[0])
@@ -199,22 +190,34 @@ class openlst_demod(gr.sync_block):
 						print("Data matched")
 						self._out_buffer.extend(pkt)
 				self._mode = 'preamble'
-
+	
 		if len(self._out_buffer) > 0:
-			bytes_out = min(len(self._out_buffer), len(output_items[0]))
+			# Get sizes of out_buffer and output_items
+			buffer_size = len(self._out_buffer)
+			output_size = len(output_items[0])
 
-			data_out = self._out_buffer[:bytes_out]
-			data_remaining = self._out_buffer[bytes_out:]
+			# Get number of bytes out as the min of those two
+			num_bytes_out = min(buffer_size, output_size)
 
-			output_items[0][:bytes_out] = data_out
-			print(f"Data out: {data_out}")
+			# Split the buffer into what we're sending out and the remaining buffer
+			data = self._out_buffer[:num_bytes_out]
+			buff = self._out_buffer[num_bytes_out:]
 
-			if len(data_remaining) > 0:
-				self._out_buffer = data_remaining
-			else:
-				self._out_buffer.pop(0)
-			return bytes_out
+			# Add data to output
+			output_items[0][:num_bytes_out] = data
+			print(f"Data out: {data}")
+
+			# Set out_buffer to new buffer
+			self._out_buffer = buff
+
+			# Consume unused bytes in the case that the number of output_items exceeds the data we have to send
+			if output_size > num_bytes_out:
+				self.consume(0, output_size - num_bytes_out)
+
+			# Return number of bytes out
+			return num_bytes_out
 		
+		# Consume all input items and return 0 for no bytes to return
 		self.consume(0, len(input_items[0]))
 		return 0
 
