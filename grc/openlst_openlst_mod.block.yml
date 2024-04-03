@@ -35,6 +35,14 @@ parameters:
   label: Enable data whitening
   dtype: bool
   default: true
+- id: seq_byte1
+  label: Sequence byte 1
+  dtype: byte
+  default: 0x22
+- id: seq_byte0
+  label: Sequence byte 0
+  dtype: byte
+  default: 0x69
 
 inputs:
 - label: in
