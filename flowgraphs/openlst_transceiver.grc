@@ -158,7 +158,7 @@ blocks:
     bus_structure: null
     coordinate: [48, 524.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: blocks_file_sink_1
   id: blocks_file_sink
   parameters:
@@ -174,9 +174,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 764.0]
+    coordinate: [656, 796.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: blocks_file_source_0
   id: blocks_file_source
   parameters:
@@ -206,7 +206,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/ryan/gr-dora/output/INPUT_set_radio_transmission_state
+    file: ../output/INPUT_set_radio_transmission_state
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -218,7 +218,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 764.0]
+    coordinate: [56, 796.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle_0
@@ -239,7 +239,7 @@ blocks:
     bus_structure: null
     coordinate: [352, 236.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: digital_gfsk_demod_0
   id: digital_gfsk_demod
   parameters:
@@ -262,7 +262,7 @@ blocks:
     bus_structure: null
     coordinate: [592, 412.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: digital_gfsk_mod_0
   id: digital_gfsk_mod
   parameters:
@@ -281,7 +281,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 676.0]
+    coordinate: [656, 708.0]
     rotation: 0
     state: enabled
 - name: digital_symbol_sync_xx_0
@@ -310,7 +310,7 @@ blocks:
     bus_structure: null
     coordinate: [832, 444.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: low_pass_filter_0
   id: low_pass_filter
   parameters:
@@ -334,7 +334,7 @@ blocks:
     bus_structure: null
     coordinate: [640, 188.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: mmse_resampler_xx_0
   id: mmse_resampler_xx
   parameters:
@@ -352,7 +352,7 @@ blocks:
     bus_structure: null
     coordinate: [960, 240.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: mmse_resampler_xx_1
   id: mmse_resampler_xx
   parameters:
@@ -368,7 +368,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 696.0]
+    coordinate: [928, 728.0]
     rotation: 0
     state: enabled
 - name: network_tcp_sink_0
@@ -406,7 +406,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [96, 676.0]
+    coordinate: [96, 708.0]
     rotation: 0
     state: disabled
 - name: openlst_openlst_demod_0
@@ -432,7 +432,7 @@ blocks:
     bus_structure: null
     coordinate: [352, 388.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: openlst_openlst_mod_0
   id: openlst_openlst_mod
   parameters:
@@ -454,9 +454,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [352, 628.0]
+    coordinate: [352, 660.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: qtgui_waterfall_sink_x_0
   id: qtgui_waterfall_sink_x
   parameters:
@@ -509,7 +509,7 @@ blocks:
     nconnections: '1'
     showports: 'False'
     type: complex
-    update_time: '0.075'
+    update_time: '0.1'
     wintype: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
@@ -517,7 +517,7 @@ blocks:
     bus_structure: null
     coordinate: [640, 84.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: qtgui_waterfall_sink_x_0_0
   id: qtgui_waterfall_sink_x
   parameters:
@@ -570,13 +570,13 @@ blocks:
     nconnections: '1'
     showports: 'False'
     type: complex
-    update_time: '0.001'
+    update_time: '0.1'
     wintype: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 812.0]
+    coordinate: [1248, 844.0]
     rotation: 0
     state: enabled
 - name: soapy_hackrf_sink_0
@@ -596,9 +596,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 728.0]
+    coordinate: [1248, 760.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: soapy_rtlsdr_source_0
   id: soapy_rtlsdr_source
   parameters:
@@ -620,7 +620,7 @@ blocks:
     bus_structure: null
     coordinate: [48, 228.0]
     rotation: 0
-    state: disabled
+    state: enabled
 
 connections:
 - [blocks_file_source_0, '0', blocks_throttle_0, '0']

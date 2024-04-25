@@ -69,9 +69,9 @@ class openlst_mod(gr.basic_block):
 		self._to_consume = 0
 
 		self._mode = 'sequence-bytes'
-		self._length = None
+		self._length = 0
 
-		self._output_multiple = 10
+		self._output_multiple = 16
 		self.set_output_multiple(self._output_multiple)
 
 	def forecast(self, noutput_items, ninputs):
@@ -95,19 +95,19 @@ class openlst_mod(gr.basic_block):
 			while len(self._in_buffer) >= len(self.sequence_bytes):
 				sb = self._in_buffer[:2]
 				if sb == self.sequence_bytes:
-					print("Sequence bytes matched")
+					print("[Mod] Sequence bytes matched")
 					self._mode = 'length'
 					self.consume_input(2)
 					break
 				else:
 					self.consume_input(1)
-		elif self._mode == 'length':
+		if self._mode == 'length':
 			if len(self._in_buffer) >= 1:
 				self._length = self._in_buffer[0]
-				print("Length matched:", self._length)
+				print("[Mod] Length matched:", self._length)
 				self._mode = 'data'
 				self.consume_input(1)
-		elif self._mode == 'data':
+		if self._mode == 'data':
 			if len(self._in_buffer) >= self._length:
 				raw = bytes(self._in_buffer[:self._length])
 
@@ -136,11 +136,12 @@ class openlst_mod(gr.basic_block):
 					content = encode_fec(content)
 
 				# Queue these bytes for transmission
-				encoded_data = [byte for byte in preamble + content]
+				encoded_data = [byte for byte in preamble + content + bytes([0]*8)]
+				# encoded_data = [int(bit) for byte in preamble + content for bit in bin(byte)[2:].zfill(8)]
 				self._out_buffer.extend(encoded_data)
 
 				self.consume_input(self._length, call_consume=False)
-				self._length = None
+				self._length = 0
 				self._mode = "sequence-bytes"
 			else:
 				self.consume_input(len(input_items[0]), pop_buffer=False)
@@ -157,9 +158,11 @@ class openlst_mod(gr.basic_block):
 			data = self._out_buffer[:num_bytes_out]
 			buff = self._out_buffer[num_bytes_out:]
 
+			# data.extend(0)
+
 			# Add data to output
 			output_items[0][:num_bytes_out] = data
-			print(f"Data out: {data}")
+			print(f"[Mod] Data out: {data}")
 
 			# Set out_buffer to new buffer
 			self._out_buffer = buff
@@ -168,7 +171,11 @@ class openlst_mod(gr.basic_block):
 			if (buffer_size <= output_size):
 				self.consume_input(self._to_consume, pop_buffer=False)
 
+			if num_bytes_out == 32:
+				pass
+
 			# Return number of bytes out
+			print(num_bytes_out)
 			return num_bytes_out
 		
 		# Return 0 for no bytes to return
