@@ -223,7 +223,7 @@ blocks:
     comment: ''
     cutoff_freq: 50e3
     decim: '1'
-    gain: '1'
+    gain: '.5'
     interp: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
