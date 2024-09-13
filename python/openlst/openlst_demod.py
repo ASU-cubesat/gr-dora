@@ -239,10 +239,12 @@ def reformat_from_rf(raw):
 	packet = raw[3:len(raw) - 4]
 	hwid = raw[len(raw) - 4:len(raw) - 2]
 	msg = hwid + seqnum + packet
+	msg = 0x22 + 0x69 + len(msg) + msg
 	checksum = int.from_bytes(raw[len(raw) - 2:], byteorder='little')
 	expected = crc16(bytes([len(raw)]) + raw[:-2])
 	if checksum != expected:
 		raise CRCError(expected, checksum)
+	print(msg.hex())
 	return msg, flags
 
 def bitcast(bitlist):
