@@ -20,15 +20,15 @@ class openlst_demod(gr.sync_block):
 	This block decodes a raw RF packet:
 
 		| Preamble | Sync Word(s) | Data Section |
-	
+
 	Where "Data Section" contains:
 
 		| Length (1 byte) | Flags (1 byte) | Seqnum (2 bytes) | Data (N bytes) | HWID (2 bytes) | CRC (2 bytes)
 
 	Into a message in the form:
-		
+
 		| HWID (2 bytes) | Seqnum (2 bytes) | Data (N bytes) |
-	
+
 	The Data Section may be 2:1 Forward-Error Correction (FEC) encoded, in which
 	case bit errors can be corrected. PN-9 decoding is also supported.
 
@@ -193,7 +193,7 @@ class openlst_demod(gr.sync_block):
 						print("[Demod] Data matched")
 						self._out_buffer.extend(pkt)
 				self._mode = 'preamble'
-	
+
 		if len(self._out_buffer) > 0:
 			# Get sizes of out_buffer and output_items
 			buffer_size = len(self._out_buffer)
@@ -219,7 +219,7 @@ class openlst_demod(gr.sync_block):
 
 			# Return number of bytes out
 			return num_bytes_out
-		
+
 		# Consume all input items and return 0 for no bytes to return
 		self.consume(0, len(input_items[0]))
 		return 0
@@ -238,13 +238,17 @@ def reformat_from_rf(raw):
 	seqnum = raw[1:3]
 	packet = raw[3:len(raw) - 4]
 	hwid = raw[len(raw) - 4:len(raw) - 2]
-	msg = hwid + seqnum + packet
-	msg = 0x22 + 0x69 + len(msg) + msg
+	payload = hwid + seqnum + packet
+
+	sync_bytes = bytes([0x22, 0x69])
+	length = (len(payload)).to_bytes(1, byteorder='big')
+	msg = sync_bytes + length + payload
+
 	checksum = int.from_bytes(raw[len(raw) - 2:], byteorder='little')
 	expected = crc16(bytes([len(raw)]) + raw[:-2])
 	if checksum != expected:
 		raise CRCError(expected, checksum)
-	print(msg.hex())
+
 	return msg, flags
 
 def bitcast(bitlist):
