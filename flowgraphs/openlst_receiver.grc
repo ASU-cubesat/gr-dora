@@ -122,7 +122,7 @@ blocks:
     bus_structure: null
     coordinate: [72, 540.0]
     rotation: 180
-    state: true
+    state: disabled
 - name: blocks_file_source_0
   id: blocks_file_source
   parameters:
@@ -144,7 +144,7 @@ blocks:
     bus_structure: null
     coordinate: [56, 252.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: blocks_throttle_0
   id: blocks_throttle
   parameters:
@@ -223,7 +223,7 @@ blocks:
     comment: ''
     cutoff_freq: 50e3
     decim: '1'
-    gain: '.5'
+    gain: '1'
     interp: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -275,7 +275,7 @@ blocks:
     bus_structure: null
     coordinate: [40, 412.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: openlst_openlst_demod_0
   id: openlst_openlst_demod
   parameters:
@@ -367,6 +367,7 @@ blocks:
     affinity: ''
     agc: 'False'
     alias: ''
+    bias: 'False'
     center_freq: freq
     comment: ''
     dev_args: ''
@@ -382,7 +383,7 @@ blocks:
     bus_structure: null
     coordinate: [48, 172.0]
     rotation: 0
-    state: disabled
+    state: enabled
 
 connections:
 - [blocks_file_source_0, '0', blocks_throttle_0, '0']
@@ -398,3 +399,4 @@ connections:
 
 metadata:
   file_format: 1
+  grc_version: 3.10.7.0
